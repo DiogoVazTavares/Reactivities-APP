@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Persistence
+﻿namespace Persistence
 {
-    public class Value
+  public class Value
     {
         public int Id { get; set; }
         public string Name { get; set; }
