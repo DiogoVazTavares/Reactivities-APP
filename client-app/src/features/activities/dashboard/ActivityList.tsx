@@ -1,20 +1,16 @@
-import React, { FC, SyntheticEvent } from 'react'
-import { Item, Button, Segment, Label } from 'semantic-ui-react'
-import { IActivity } from '../../../app/models/activity'
+import React, { FC, useContext } from 'react';
+import { Item, Button, Segment, Label } from 'semantic-ui-react';
+import ActivityStore from '../../../app/stores/activityStore';
+import { observer } from 'mobx-react-lite';
 
-interface IProps {
-  activities: IActivity[];
-  selectActivity: (id: string) => void;
-  deleteActivity: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
+const ActivityList: FC = () => {
+  const activityStore = useContext(ActivityStore);
+  const { selectActivity, activitiesByDate, deleteActivity, submitting, target } = activityStore;
 
-export const ActivityList: FC<IProps> = ({ activities, selectActivity, deleteActivity, submitting, target }) => {
   return (
     <Segment clearing>
       <Item.Group divided>
-        {activities.map(activity =>
+        {activitiesByDate.map(activity =>
           <Item key={activity.id}>
             <Item.Content>
               <Item.Header as='a'>{activity.title}</Item.Header>
@@ -47,3 +43,5 @@ export const ActivityList: FC<IProps> = ({ activities, selectActivity, deleteAct
     </Segment>
   )
 }
+
+export default observer(ActivityList);
