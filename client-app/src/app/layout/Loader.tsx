@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
-import { Dimmer, Loader as LoaderComponent } from 'semantic-ui-react'
+import { Dimmer, Loader } from 'semantic-ui-react'
 interface IProps { inverted?: boolean, content: string };
 
-const Loader: FC<IProps> = ({ inverted, content }) => {
+const LoaderComponent: FC<IProps> = ({ inverted, content }) => {
   return (
     <Dimmer active inverted={inverted}>
-      <LoaderComponent content={content} />
+      <Loader content={content} />
     </Dimmer>
 
   )
 }
 
-export default Loader
+export default LoaderComponent
