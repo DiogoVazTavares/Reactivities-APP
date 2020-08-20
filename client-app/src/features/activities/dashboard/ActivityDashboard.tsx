@@ -12,7 +12,7 @@ const ActivityDashboard: FC = () => {
     activityStore.loadActivities();
   }, [activityStore])
 
-  if (activityStore.loadingInitial) return <LoaderComponent inverted={true} content="Loading activities" />
+  if (activityStore.loadingInitial) return <LoaderComponent content="Loading activities" />
 
   return (
     <Grid>

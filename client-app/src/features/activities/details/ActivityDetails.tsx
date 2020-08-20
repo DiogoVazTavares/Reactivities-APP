@@ -13,15 +13,20 @@ interface DetailParams {
   id: string;
 }
 
-const ActivityDetails: FC<RouteComponentProps<DetailParams>> = ({ match }) => {
+const ActivityDetails: FC<RouteComponentProps<DetailParams>> = ({ match, history }) => {
   const activityStore = useContext(ActivityStore);
   const { activity, loadActivity, loadingInitial } = activityStore;
 
   useEffect(() => {
-    loadActivity(match.params.id);
-  }, [loadActivity, match.params.id])
+    loadActivity(match.params.id)
+    //Don't need to and the error here because we do it on agent.ts
+    //.catch(() => history.push('/notFound'));
 
-  if (loadingInitial || !activity) return <LoaderComponent content={"Loading activity..."} />
+  }, [loadActivity, match.params.id, history])
+
+  if (loadingInitial) return <LoaderComponent content={"Loading activity..."} />
+
+  if (!activity) return <h2>Activity not found</h2>
 
   return (
     <Grid>

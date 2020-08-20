@@ -59,6 +59,8 @@ class ActivityStore {
       }
       catch (error) {
         runInAction('getting activity error', () => this.loadingInitial = false);
+        //Don't need to throw because we have access to history in agent.ts
+        // throw error;
         console.log(error);
       }
     }

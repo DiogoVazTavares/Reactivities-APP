@@ -1,9 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
 using MediatR;
 using Persistence;
+using FluentValidation;
 
 namespace Application.Activities
 {
@@ -12,12 +14,29 @@ namespace Application.Activities
     public class Command : IRequest
     {
       public Guid Id { get; set; }
+
+      //DataAnnotations => this is the simplest way to add validation in .Net
+      //Addind the atribute to the class property
+      // [Required]
       public string Title { get; set; }
       public string Description { get; set; }
       public string Category { get; set; }
       public DateTime Date { get; set; }
       public string City { get; set; }
       public string Venue { get; set; }
+    }
+
+    public class CommandValidator : AbstractValidator<Command>
+    {
+      public CommandValidator()
+      {
+        RuleFor(x => x.Title).NotEmpty();
+        RuleFor(x => x.Description).NotEmpty();
+        RuleFor(x => x.Category).NotEmpty();
+        RuleFor(x => x.Date).NotEmpty();
+        RuleFor(x => x.City).NotEmpty();
+        RuleFor(x => x.Venue).NotEmpty();
+      }
     }
 
     public class Handler : IRequestHandler<Command, Unit>
@@ -30,22 +49,24 @@ namespace Application.Activities
 
       public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
       {
-        var activity = new Activity {
-           Id = request.Id,
-           Title = request.Title, 
-           Description = request.Description, 
-           Category = request.Category, 
-           Date = request.Date, 
-           City = request.City,
-           Venue = request.Venue
+        var activity = new Activity
+        {
+          Id = request.Id,
+          Title = request.Title,
+          Description = request.Description,
+          Category = request.Category,
+          Date = request.Date,
+          City = request.City,
+          Venue = request.Venue
         };
 
         _context.Activities.Add(activity);
 
         var successed = await _context.SaveChangesAsync() > 0;
 
-        if(successed) {
-            return Unit.Value;
+        if (successed)
+        {
+          return Unit.Value;
         }
 
         throw new Exception("Problem saving actvity");

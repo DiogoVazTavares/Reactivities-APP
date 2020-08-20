@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { Dimmer, Loader } from 'semantic-ui-react'
-interface IProps { inverted?: boolean, content: string };
+interface IProps { content: string };
 
-const LoaderComponent: FC<IProps> = ({ inverted, content }) => {
+const LoaderComponent: FC<IProps> = ({ content }) => {
   return (
-    <Dimmer active inverted={inverted}>
+    <Dimmer active inverted >
       <Loader content={content} />
     </Dimmer>
 
