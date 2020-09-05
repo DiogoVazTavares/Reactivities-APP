@@ -1,5 +1,7 @@
 using System;
+using Domain;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,17 +22,18 @@ namespace API
         try
         {
           var context = services.GetRequiredService<DataContext>();
+          var userManager = services.GetRequiredService<UserManager<AppUser>>();
           context.Database.Migrate();
-          Seed.SeedData(context);
+          Seed.SeedData(context, userManager).Wait();
         }
         catch (Exception ex)
         {
-					var logger = services.GetRequiredService<ILogger<Program>>();
-					logger.LogError(ex, "Error during migration");
+          var logger = services.GetRequiredService<ILogger<Program>>();
+          logger.LogError(ex, "Error during migration");
         }
       };
 
-			host.Run();
+      host.Run();
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
